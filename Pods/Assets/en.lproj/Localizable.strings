@@ -1,0 +1,18 @@
+/* 
+  TIRateMeStrings.strings
+  touchin-rateme
+
+  Created by Толя Ларин on 09/01/15.
+
+*/
+"Like-Question"="Тебе нравится приложение?";
+"Like-Yes"="О, да!";
+"Like-No"="Нет";
+
+"AppStore-Question"="Оставишь отзыв в AppStore?";
+"AppStore-Yes"="Без проблем";
+"AppStore-No"="Нет";
+
+"Feedback-Question"="Расскажешь почему?";
+"Feedback-Yes"="Да";
+"Feedback-No"="Нет";
