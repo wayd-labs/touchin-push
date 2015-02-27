@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TIRateMeTableWrapper.h"
-#import <MessageUI/MFMailComposeViewController.h>
+#import "TIAllowPushTableWrapper.h"
+#import "TIAppearance.h"
 
-@interface TIRateMeCellTableViewCell : UITableViewCell<MFMailComposeViewControllerDelegate>
+@interface TIAllowPushCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
 @property (weak, nonatomic) IBOutlet UILabel *questionLabel;
 
+@property (strong, nonatomic) TIAppearance *appearance;
 @property (weak) id delegate;
 
 @end

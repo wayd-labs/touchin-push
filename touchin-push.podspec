@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "touchin-push"
-  s.version          = "0.1"
+  s.version          = "0.2.1"
   s.summary          = "iOS push notification the easy way."
   s.description      = <<-DESC
                        An optional longer description of touchin-analytics
@@ -31,9 +31,8 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes'
 #  s.resources = 'Pod/Assets'
   s.resource_bundles = {
-    'TIRateMe' => ['Pod/Assets/TIRateMeCell.xib', 'Pod/Assets/*.lproj/*']
+    'TIPush' => ['Pod/Assets/*.xib', 'Pod/Assets/*.lproj']
   }
 
   s.frameworks = 'UIKit'
-  s.dependency 'HexColors', '~> 2.2.1'
 end

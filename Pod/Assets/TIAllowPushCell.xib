@@ -8,7 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="95" id="nG5-86-MwH" customClass="TIRateMeCellTableViewCell">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="95" id="nG5-86-MwH" customClass="TIAllowPushCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nG5-86-MwH" id="zch-A9-ahI">
@@ -55,9 +55,9 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
-                <outlet property="noButton" destination="Cgr-cl-pba" id="xSu-ae-gCA"/>
-                <outlet property="questionLabel" destination="zGe-q3-TtT" id="Yrc-kj-E6p"/>
-                <outlet property="yesButton" destination="0ZO-VZ-QwQ" id="R5L-b9-S4Q"/>
+                <outlet property="noButton" destination="Cgr-cl-pba" id="vz4-zI-vJk"/>
+                <outlet property="questionLabel" destination="zGe-q3-TtT" id="RLX-pM-k2U"/>
+                <outlet property="yesButton" destination="0ZO-VZ-QwQ" id="47c-ff-OCY"/>
             </connections>
             <point key="canvasLocation" x="243" y="175.5"/>
         </tableViewCell>
