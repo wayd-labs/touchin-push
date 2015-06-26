@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "objc/runtime.h"
 #import <TITrivia.h>
+#import <TIAnalytics.h>
 
 @implementation TIPushNotifications
 
@@ -172,6 +173,7 @@ void didFailToRegisterForRemoteNotificationsWithError(id self, SEL _cmd, UIAppli
 void didRegisterForRemoteNotifictationsWithDeviceToken(id self, SEL _cmd, UIApplication* app, NSData* token) {
     NSLog(@"hooked didRegisterForRemoteNotifictationsWithDeviceToken %@", token);
     [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:UD_SYSTEM_APPROVAL];
+    [TIAnalytics.shared trackEvent:@"ALLOWPUSH-SYSTEM_YES"];  
 
     NSString *deviceToken = [[token description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -197,16 +199,19 @@ void didRegisterForRemoteNotifictationsWithDeviceToken(id self, SEL _cmd, UIAppl
     }
     return;
   }
-  
+
+  [TIAnalytics.shared trackEvent:@"ALLOWPUSH-ALERT_SHOWN"];
   [TITrivia.sharedInstance showYesNoAlertWithTitle:title message:message denyButtonTitle:denyButtonTitle allowButtonTitle:allowButtonTitle completion:^(BOOL allowTapped) {
     if (allowTapped) {
       [self registerPushNotification:^(bool success) {
         completionHandler(success);
       }];
+      [TIAnalytics.shared trackEvent:@"ALLOWPUSH-ALERT_YES"];
     } else {
       if (completionHandler) {
         completionHandler(NO);
       }
+      [TIAnalytics.shared trackEvent:@"ALLOWPUSH-ALERT_NO"];
     }
   }];
 }
