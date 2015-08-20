@@ -1,13 +1,9 @@
-//
-//  TINotifications.h
-//  Pods
-//
-//  Created by Толя Ларин on 26/01/15.
-//
-//
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+extern NSString* UD_OUR_APPROVAL;
+extern NSString* UD_SYSTEM_APPROVAL;
+extern NSString* UD_ASKED_SYSTEM_APPROVAL;
 
 @interface TIPushNotifications : NSObject
 
@@ -34,4 +30,6 @@
                                    denyButtonTitle:(NSString *)denyButtonTitle
                                   allowButtonTitle:(NSString *)allowButtonTitle
                                  completionHandler:(void (^)(BOOL success)) completionHandler;
+
+- (void) callActiveCallback:(BOOL) success;
 @end

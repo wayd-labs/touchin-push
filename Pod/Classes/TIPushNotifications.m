@@ -11,8 +11,15 @@
 #import "objc/runtime.h"
 #import <TITrivia.h>
 #import <TIAnalytics.h>
+#import "TIPushAppDelegateProxy.h"
 
 @implementation TIPushNotifications
+
+NSString* UD_OUR_APPROVAL = @"TIPushOurApproval";
+NSString* UD_SYSTEM_APPROVAL = @"TIPushSystemApproval";
+NSString* UD_ASKED_SYSTEM_APPROVAL = @"TIPushAskedSystemApproval";
+
+TIPushAppDelegateProxy* appdelegateProxy;
 
 + (instancetype)sharedInstance {
     static id sharedInstance = nil;
@@ -25,13 +32,9 @@
     return sharedInstance;
 }
 
-NSString* UD_OUR_APPROVAL = @"TIPushOurApproval";
-NSString* UD_SYSTEM_APPROVAL = @"TIPushSystemApproval";
-NSString* UD_ASKED_SYSTEM_APPROVAL = @"TIPushAskedSystemApproval";
-
 - (instancetype) init {
     self = [super init];
-    [self swizzleAppDelegateMethods];
+    appdelegateProxy = [[TIPushAppDelegateProxy alloc] initReplacingAppDelegate];
     return self;
 }
 
@@ -57,6 +60,12 @@ NSString* UD_ASKED_SYSTEM_APPROVAL = @"TIPushAskedSystemApproval";
 }
 
 void (^activeCallback)(BOOL success) = nil;
+
+- (void) callActiveCallback:(BOOL) success {
+    if (activeCallback) {
+        activeCallback(success);
+    }
+}
 
 - (void) registerPushNotification:(void (^)(BOOL success))result {
   if (result) {
@@ -113,79 +122,6 @@ void (^activeCallback)(BOOL success) = nil;
 
 - (void) setAskedSystemApproval:(BOOL) asked {
     [[NSUserDefaults standardUserDefaults] setObject:@(asked) forKey:UD_ASKED_SYSTEM_APPROVAL];
-}
-
-#pragma mark ApplicationDelegate methods
-- (void) swizzleAppDelegateMethods {
-
-#pragma warning USE this
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-    
-    BOOL result = false;
-    Class appDelegateClass = [[UIApplication sharedApplication].delegate class];
-    SEL sel;
-    Method m;
-
-//    sel = @selector(application:didFinishLaunchingWithOptions:);
-//    m = class_getInstanceMethod(appDelegateClass, sel);
-//    result = class_addMethod(appDelegateClass, sel, (IMP) didFinishLaunchingWithOptions, method_getTypeEncoding(m));
-//    __original_didFinishLaunchingWithOptions = method_setImplementation(m, (IMP) didFinishLaunchingWithOptions);
-    
-    sel = @selector(application:didFailToRegisterForRemoteNotificationsWithError:);
-    m = class_getInstanceMethod(appDelegateClass, sel);
-    result = class_addMethod(appDelegateClass, @selector(application:didFailToRegisterForRemoteNotificationsWithError:), (IMP) didFailToRegisterForRemoteNotificationsWithError, method_getTypeEncoding(m));
-
-    sel = @selector(application:didRegisterForRemoteNotificationsWithDeviceToken:);
-    m = class_getInstanceMethod(appDelegateClass, sel);
-    result = class_addMethod(appDelegateClass, sel, (IMP) didRegisterForRemoteNotifictationsWithDeviceToken, method_getTypeEncoding(m));
-
-  sel = @selector(application:didRegisterUserNotificationSettings:);
-  m = class_getInstanceMethod(appDelegateClass, sel);
-  result = class_addMethod(appDelegateClass, sel, (IMP) didRegisterUserNotificationSettings, method_getTypeEncoding(m));
-}
-
-//void didFinishLaunchingWithOptions(id self, SEL _cmd, UIApplication* app, NSDictionary* options) {
-//    NSLog(@"hooked didFinishLaunchingWithOptions %@", options);
-//    ((void(*)(id,SEL,UIApplication*,NSDictionary*))__original_didFinishLaunchingWithOptions)(self, _cmd, app, options);
-//    [TIPushNotifications.sharedInstance reregisterOnStart];
-//}
-
-void didRegisterUserNotificationSettings(id self, SEL _cmd, UIApplication* app, UIUserNotificationSettings *notificationSettings) {
-  bool alertAllowed = notificationSettings.types & UIUserNotificationTypeAlert;
-  [[NSUserDefaults standardUserDefaults] setObject:@(alertAllowed) forKey:UD_SYSTEM_APPROVAL];
-  if (alertAllowed) {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-  }
-  if (activeCallback) {
-    activeCallback(alertAllowed); //this one is freaking me out
-  }
-}
-
-void didFailToRegisterForRemoteNotificationsWithError(id self, SEL _cmd, UIApplication* app, NSError* error) {
-  NSLog(@"hooked didFailToRegisterForRemoteNotificationsWithError %@", error);
-  [TITrivia.sharedInstance showSimpleMessageWithTitle:@"Notification Registration Failed" message:error.localizedDescription];
-//  if (activeCallback) {
-//    activeCallback(NO); //kind a tricky part here, we still have the alert on simulator
-//  }
-}
-
-void didRegisterForRemoteNotifictationsWithDeviceToken(id self, SEL _cmd, UIApplication* app, NSData* token) {
-    NSLog(@"hooked didRegisterForRemoteNotifictationsWithDeviceToken %@", token);
-    [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:UD_SYSTEM_APPROVAL];
-    [TIAnalytics.shared trackEvent:@"ALLOWPUSH-SYSTEM_YES"];  
-
-    NSString *deviceToken = [[token description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-
-    NSString *locale = [[NSLocale currentLocale]localeIdentifier];
-    NSString *timeZone = [NSTimeZone localTimeZone].name;
-    
-    TIPushNotifications.sharedInstance.sendTokenToServer(deviceToken, locale, timeZone);
-  
-  if (activeCallback) {
-    activeCallback(YES);
-  }
 }
 
 - (void) showRemoteNotificationPermissionWithTitle:(NSString *)title
