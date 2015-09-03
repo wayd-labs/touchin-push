@@ -71,7 +71,7 @@
     NSString *deviceToken = [[token description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSString *locale = [[NSLocale currentLocale]localeIdentifier];
+    NSString *locale = [NSLocale preferredLanguages][0];
     NSString *timeZone = [NSTimeZone localTimeZone].name;
     
     TIPushNotifications.sharedInstance.sendTokenToServer(deviceToken, locale, timeZone);
