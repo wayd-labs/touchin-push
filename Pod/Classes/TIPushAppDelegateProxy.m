@@ -110,9 +110,13 @@
     if (type == nil) {
         NSLog(@"#tipush WARNING: key 'type' not found in userInfo %@", userInfo);
     } else {
-        prop = @{@"type":type};
+        NSDate *date = [NSDate date];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
+        NSInteger hour = [components hour];
+        prop = @{@"type":type, @"hour" : @(hour)};
     }
-    
+  
     if (application.applicationState == UIApplicationStateInactive) {
         [TIAnalytics.shared trackEvent:@"PUSH_APP_OPEN" properties:prop];
     }
