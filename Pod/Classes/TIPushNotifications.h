@@ -25,6 +25,8 @@ extern NSString* UD_ASKED_SYSTEM_APPROVAL;
 //debug method clears all data stored in NSUserDefaults
 - (void) clear;
 
+@property (nonatomic) NSInteger limitPerLaunch;
+
 - (void) showRemoteNotificationPermissionWithTitle:(NSString *)title
                                            message:(NSString *)message
                                    denyButtonTitle:(NSString *)denyButtonTitle
