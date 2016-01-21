@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "touchin-push"
-  s.version          = "0.3.2"
+  s.version          = "0.3.3"
   s.summary          = "iOS push notification the easy way."
   s.description      = <<-DESC
                        An optional longer description of touchin-analytics
