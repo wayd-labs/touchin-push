@@ -162,6 +162,10 @@ void (^activeCallback)(BOOL success) = nil;
         [TIAnalytics.shared trackEvent:@"ALLOWPUSH-ALERT_NO"];
       }
     }];
+  } else {
+      if (completionHandler) {
+        completionHandler(NO);
+      }
   }
 }
 @end
