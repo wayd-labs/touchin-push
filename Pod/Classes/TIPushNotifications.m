@@ -9,8 +9,8 @@
 #import "TIPushNotifications.h"
 #import <UIKit/UIKit.h>
 #import "objc/runtime.h"
-#import <TITrivia.h>
-#import <TIAnalytics.h>
+#import "TITrivia.h"
+#import "TIAnalytics.h"
 #import "TIPushAppDelegateProxy.h"
 
 @interface TIPushNotifications()

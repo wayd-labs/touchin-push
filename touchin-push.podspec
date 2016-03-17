@@ -9,20 +9,12 @@
 
 Pod::Spec.new do |s|
   s.name             = "touchin-push"
-  s.version          = "0.3.3"
+  s.version          = "0.3.4"
   s.summary          = "iOS push notification the easy way."
-  s.description      = <<-DESC
-                       An optional longer description of touchin-analytics
-
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
-                       DESC
   s.homepage         = "https://github.com/touchinstinct/touchin-push"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "alarin" => "me@alarin.ru" }
   s.source           = { :git => "https://github.com/touchinstinct/touchin-push.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
@@ -34,5 +26,6 @@ Pod::Spec.new do |s|
     'TIPush' => ['Pod/Assets/*.xib', 'Pod/Assets/*.lproj']
   }
 
+  s.dependency  'touchin-analytics/CoreIOS'
   s.frameworks = 'UIKit'
 end
