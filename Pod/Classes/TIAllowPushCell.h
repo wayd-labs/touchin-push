@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TIAllowPushTableWrapper.h"
-#import "TIAppearance.h"
+#import "touchin_trivia/TIAppearance.h"
 
 @interface TIAllowPushCell : UITableViewCell
 

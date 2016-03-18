@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "touchin-push"
-  s.version          = "0.3.4"
+  s.version          = "0.4.0"
   s.summary          = "iOS push notification the easy way."
   s.homepage         = "https://github.com/touchinstinct/touchin-push"
   s.license          = 'MIT'
