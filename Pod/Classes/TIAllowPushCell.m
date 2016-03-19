@@ -52,7 +52,7 @@
     [self setUpButton:self.yesButton];
     [self setUpButton:self.noButton];
     
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TIPush" ofType:@"bundle"];
+    NSString *bundlePath = [[NSBundle bundleForClass:[TIAllowPushCell class]] pathForResource:@"TIPush" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     [self.yesButton setTitle:[bundle localizedStringForKey:@"AllowPush-Yes" value:@"" table:nil] forState:UIControlStateNormal];
     [self.noButton setTitle:[bundle localizedStringForKey:@"AllowPush-No" value:@"" table:nil] forState:UIControlStateNormal];

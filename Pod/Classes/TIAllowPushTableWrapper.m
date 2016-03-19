@@ -13,7 +13,7 @@
 @implementation TIAllowPushTableWrapper
 
 - (UITableViewCell*) createServiceCell {
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TIPush" ofType:@"bundle"];
+    NSString *bundlePath = [[NSBundle bundleForClass:[TIAllowPushTableWrapper class]] pathForResource:@"TIPush" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     NSArray *topLevelObjects = [bundle loadNibNamed:@"TIAllowPushCell" owner:self options:nil];
     TIAllowPushCell* cell = [topLevelObjects objectAtIndex:0];
