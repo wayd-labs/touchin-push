@@ -12,6 +12,9 @@
 #import "TITrivia.h"
 #import "TIAnalytics.h"
 #import "TIPushAppDelegateProxy.h"
+#import <UserNotifications/UserNotifications.h>
+
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 @interface TIPushNotifications()
 
@@ -79,13 +82,24 @@ void (^activeCallback)(BOOL success) = nil;
   if (result) {
     activeCallback = result;
   }
-  UIApplication *application = [UIApplication sharedApplication];
-  if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge                                                                                            |UIRemoteNotificationTypeSound                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
-    [application registerUserNotificationSettings:settings];
+  
+  if (SYSTEM_VERSION_LESS_THAN(@"10.0")) {
+    UIApplication *application = [UIApplication sharedApplication];
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+      UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:
+                                              (UIRemoteNotificationTypeBadge                                                                                            |UIRemoteNotificationTypeSound                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
+      [application registerUserNotificationSettings:settings];
+    } else {
+      [application registerForRemoteNotificationTypes:
+       (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
   } else {
-    [application registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+      if (!error) {
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+      }
+    }];
   }
   [self setAskedSystemApproval:@(YES)];
 }
@@ -163,9 +177,9 @@ void (^activeCallback)(BOOL success) = nil;
       }
     }];
   } else {
-      if (completionHandler) {
-        completionHandler(NO);
-      }
+    if (completionHandler) {
+      completionHandler(NO);
+    }
   }
 }
 @end
