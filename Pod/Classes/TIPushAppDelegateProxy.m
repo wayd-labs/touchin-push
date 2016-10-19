@@ -81,10 +81,10 @@
     [_object application:application didRegisterForRemoteNotificationsWithDeviceToken:token];
 }
 
-//- (void)application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)userInfo {
-//    NSLog(@"#tipush hooked didReceiveRemoteNotification %@", userInfo);
-//    [_object application:app didReceiveRemoteNotification:userInfo];
-//}
+- (void)application:(UIApplication *)app didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"#tipush hooked didReceiveRemoteNotification %@", userInfo);
+    [_object application:app didReceiveRemoteNotification:userInfo];
+}
 
 - (id) recursiveValueForKey:(id)object key:(NSString*) key{
     if([object isKindOfClass:[NSDictionary class]]){
